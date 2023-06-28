@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .formato{
+          width: 40px;
+        }
+        input{
+           color: MediumSlateBlue;
+           text-transform: uppercase;
+        }
+
+        h3 {
+            background-color: bisque;
+            text-align : center;
+            font-family: "Tahoma";
+            font-size: 14px;
+            padding: 6px;
+        }
+
+        .botaoConfirmar {
+            background-color:green;
+            color:white;
+            cursor:pointer;
+            border-radius: 8px;
+            float:left;
+        }
+    </style>
+
+</head>
+
+<body>
+           <form id="buscaFornecedores">
+               <h3> Busca por fornecedor </h3>
+               <label for= "codigo"> Codigo </label> <br>
+               <input type="number" id="codigo" name="codigo" class="formato" autocomplete="off" required> <br>
+
+               <label for= "nome"> Nome</label> <br>
+               <input type="text" id="nome" name="nome" size="40" disabled> <br>
+
+               <label for="cidade">Cidade</label> <br>
+               <input type="text" id="cidade" name="cidade" size="30" disabled> <br>
+
+               <label for="estado">Estado </label >
+               <label for="contato" >Contato</label> <br>
+
+               <input type="text" id="estado" name = "estado" size="1" disabled>
+               <input type="text" id="contato" name="contato" size="20" disabled> <br>
+
+               <br>
+               <input type="submit" class="botaoConfirmar" value="OK" onclick="confirmaBuscaFornecedor()">
+
+            </form>
+
+            <script>
+               function confirmaBuscaFornecedor (){
+                 // realiza a busca de um fornecedores na tabela
+                 event.preventDefault()
+                 let forCodigo   = document.getElementById('codigo').value;
+                 let requisicao  = new XMLHttpRequest();
+                 let url         = "http://localhost:8080/fornecedores/" + forCodigo;
+
+                 requisicao.open("GET", url, false);
+                 requisicao.send();
+                 if (requisicao.status == 200) {
+                   dadosFornecedor = JSON.parse(requisicao.responseText);
+                   document.getElementById("nome").value    = dadosFornecedor.nome;
+                   document.getElementById("cidade").value  = dadosFornecedor.cidade;
+                   document.getElementById("estado").value  = dadosFornecedor.estado;
+                   document.getElementById("contato").value = dadosFornecedor.contato;
+                 }
+                 else {
+                   document.getElementById("nome").value    = "*** Inexistente ***";
+                   document.getElementById("cidade").value  = "";
+                   document.getElementById("estado").value  = "";
+                   document.getElementById("contato").value = "";
+                 }
+
+               }
+            </script>
+</body>
+
+</html>

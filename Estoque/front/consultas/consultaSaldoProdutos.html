@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+
+      option {
+          text-transform: uppercase;
+      }
+      h3 {
+            background-color: bisque;
+            text-align : center;
+            font-family: "Tahoma";
+            font-size: 14px;
+            padding: 6px;
+          }
+
+        .botaoConfirmar {
+            background-color:green;
+            color:white;
+            cursor:pointer;
+            border-radius: 8px;
+            float:left;
+        }
+    </style>
+
+</head>
+
+<body onload= "consultaSaldo()">
+
+           <form id="saldoProdutos">
+               <h3> Saldo dos Produtos </h3>
+               <ul id="produtosSaldo">
+
+               </ul>
+           </form>
+
+            <script>
+                function consultaSaldo(){
+
+                  let request = new XMLHttpRequest();
+                  let url = "http://localhost:8080/produtos";
+
+                  const proOpcoes = document.getElementById("produtosSaldo");
+
+                  request.open("GET", url, false);
+                  request.send();
+                  dados = JSON.parse(request.responseText);
+                  const proTodos = document.createElement("optgroup");
+                  let vetor =[];
+                  dados.forEach((item, i) => {
+                      let codiItem = item.saldo.toString().padStart(3,"0");
+                      vetor.push(item.descricao + codiItem);
+                  });
+                  vetor.sort();
+                  vetor.forEach((item, i) => {
+                     vetor[i] = "[" + item.substr(item.length-3,3) + "]   " + item.substr(0,item.length - 3);
+                  });
+                  vetor.forEach((item, i) => {
+                      proTodos.innerHTML += "<option>" + item + "</option>";
+                  });
+                  proOpcoes.append (proTodos);
+                }
+              </script>
+</body>
+
+</html>

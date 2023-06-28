@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        input {
+            color: MediumSlateBlue;
+            text-transform: uppercase;
+        }
+
+        h3 {
+            background-color: bisque;
+            text-align : center;
+            font-family: "Tahoma";
+            font-size: 14px;
+            padding: 6px;
+        }
+
+        .formato {
+                 width: 40px;
+        }
+
+        .botaoConfirmar {
+            background-color:green;
+            color:white;
+            cursor:pointer;
+            border-radius: 8px;
+            float:left;
+        }
+    </style>
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.min.js">
+    </script>
+
+</head>
+
+<body>
+           <form id="incluiMovimentacao">
+
+              <h3> Incluir Movimentação </h3>
+
+              <label for= "documento"> Documento </label>
+              <label for="data"> Data </label> <br>
+
+              <input type="text" id="documento" name="documento" size="6" required maxlength="8" autocomplete="off">
+              <input type="date" id="data" name="data" required autocomplete="off"> <br>
+
+              <label> Tipo </label> <br>
+              <label> <input type="radio" id= "entrada" name="tipo" value="E" onclick="validaTipo()"> Entrada </label>
+              <label> <input type="radio" id= "saida"   name="tipo" value="S" checked onclick="validaTipo()"> Saída </label> <br>
+
+              <label id= "tipoEntidade"> Cliente </label> <br>
+              <input type="number" id="entidade" name="entidade" required maxlength="3" autocomplete="off" class="formato" onclick="validaEntidade()">
+              <input type="text" id="nomeEntidade" name="nomeEntidade" size = "40" disabled> <br>
+
+              <label for= "produto"> Produto </label> <br>
+              <input type="number" id="produto" name="produto" required maxlength="3" autocomplete="off" class="formato" onclick="validaProduto()">
+              <input type="text" id="descricaoProduto" name="descricaoProduto" size = "40" disabled> <br>
+
+              <label for= "quantidade"> Quantidade </label> <br>
+              <input type="number" id="quantidade" name="quantidade" required maxlength="3" autocomplete="off" class="formato"> <br>
+
+              <label for= "observacao"> Observação </label> <br>
+              <input type="text" id="observacao" name="observacao" size="50" maxlength="55" autocomplete="off"> <br>
+
+              <br>
+              <input type="submit" class="botaoConfirmar" value="OK" onclick="confirmaInclusaoMovimentacao()">
+
+            </form>
+
+            <script>
+
+                function validaTipo(){
+                  // valida tipo da entidade, cliente ou fornecedor
+                  let botaoRadio   = document.getElementsByName('tipo');
+                  if (botaoRadio[0].checked == true)
+                    document.getElementById("tipoEntidade").innerHTML = "Fornecedor";
+                  else if (botaoRadio[1].checked == true)
+                       document.getElementById("tipoEntidade").innerHTML = "Cliente";
+                }
+
+                function validaEntidade(){
+                  // busca a entidade, cliente ou servidor, na tabela do banco de dados
+                  var movEntidade  = document.getElementById('entidade').value;
+                  if (movEntidade > 0) {
+                      let url = "http://localhost:8080/fornecedores/" + movEntidade;
+                      let botaoRadio   = document.getElementsByName('tipo');
+                      if (botaoRadio[1].checked == true)
+                           url = "http://localhost:8080/clientes/" + movEntidade;
+                           let requisicao = new XMLHttpRequest();
+                           requisicao.open("GET", url, false);
+                           requisicao.send();
+                           if (requisicao.status == 200){
+                              let dadosEntidade = JSON.parse(requisicao.responseText);
+                              document.getElementById("nomeEntidade").value = dadosEntidade.nome;
+                            }
+                           else
+                              document.getElementById("nomeEntidade").value = "*** Inexistente ***";
+                      }
+                }
+
+                function validaProduto(){
+                  // busca o produto na tabela do banco de dados
+                  var movProduto  = document.getElementById('produto').value;
+                  if (movProduto > 0) {
+                      let url = "http://localhost:8080/produtos/" + movProduto;
+                      let requisicao = new XMLHttpRequest();
+                      requisicao.open("GET", url, false);
+                      requisicao.send();
+                      if (requisicao.status == 200) {
+                         let dadosProduto = JSON.parse(requisicao.responseText);
+                         document.getElementById("descricaoProduto").value = dadosProduto.descricao;
+                       }
+                      else
+                          document.getElementById("descricaoProduto").value = "*** Inexistente ***";
+                  }
+                }
+
+                function confirmaInclusaoMovimentacao(){
+                      // realiza a inclusao da movimentacao nas tabelas do banco de dados
+                      let movDocumento = document.getElementById('documento').value;
+                      let movData      = document.getElementById('data').value;
+                      let botaoRadio   = document.getElementsByName('tipo');
+                      if (botaoRadio[0].checked == true)
+                         var movTipo = 'E';
+                      else if (botaoRadio[1].checked == true)
+                         var movTipo = 'S';
+                      let movEntidade  = document.getElementById('entidade').value;
+                      let movProduto   = document.getElementById('produto').value;
+                      let movQuantidade= document.getElementById('quantidade').value;
+                      let movObservacao= document.getElementById('observacao').value;
+                      var podeIncluir  = (movDocumento.length > 0) && (movData.length == 10) && (movEntidade > 0) && (movProduto > 0) && (movQuantidade > 0);
+                      if (podeIncluir)
+                            // movimentacao
+                            movJson= {"documento"  : movDocumento,
+                                      "data"       : movData,
+                                      "tipo"       : movTipo,
+                                      "entidade"   : movEntidade,
+                                      "produto"    : movProduto,
+                                      "quantidade" : movQuantidade,
+                                      "observacao" : movObservacao};
+                            $.ajax({
+                              url : "http://localhost:8080/movimentacao",
+                              type        : "POST",
+                              async       : true,
+                              contentType : "application/json",
+                              method      : "POST",
+                              dataType    : "json",
+                              data        : JSON.stringify (movJson)
+                            }).done(function(res) {});
+
+                            // produto
+                            prodJson= {"codigo" : movProduto, "operacao" : movTipo, "quantidade" : movQuantidade};
+                            $.ajax({
+                              url : "http://localhost:8080/produtos",
+                              type        : "POST",
+                              async       : true,
+                              contentType : "application/json",
+                              method      : "PATCH",
+                              dataType    : "json",
+                              data        : JSON.stringify (prodJson)
+                            }).done(function(res) {});
+                }
+            </script>
+</body>
+
+</html>

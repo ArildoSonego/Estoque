@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        input {
+            color: MediumSlateBlue;
+            text-transform: uppercase;
+        }
+
+        h3 {
+            background-color: bisque;
+            text-align : center;
+            font-family: "Tahoma";
+            font-size: 14px;
+            padding: 6px;
+        }
+
+        .botaoConfirmar {
+            background-color:green;
+            color:white;
+            cursor:pointer;
+            border-radius: 8px;
+            float:left;
+        }
+    </style>
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.min.js">
+    </script>
+
+</head>
+
+<body>
+           <form id="incluiClientes">
+               <h3> Inclusão de clientes </h3>
+               <label for= "nome"> Nome </label> <br>
+               <input type="text" id="nome" name="nome" size="40" required maxlength="40" autocomplete="off"> <br>
+
+               <label for="cidade"> Cidade </label> <br>
+               <input type="text" id="cidade" name="cidade" size="30" maxlength="30" autocomplete="off"> <br>
+
+               <label for="estado"> Estado </label>
+               <label for="contato"> Contato </label> <br>
+
+               <input type="text" id="estado" name = "estado" size="2" maxlength="2" autocomplete="off">
+               <input type="text" id="contato" name="contato" size="20" maxlength="20" autocomplete="off"> <br>
+
+               <br>
+               <input type="submit" class="botaoConfirmar" value="OK" onclick="confirmaInclusaoCliente()">
+
+            </form>
+
+            <script>
+                function confirmaInclusaoCliente(){
+                      // realiza a inclusao do cliente na tabela do banco de dados
+                      let cliNome    = document.getElementById('nome').value;
+                      let cliCidade  = document.getElementById('cidade').value;
+                      let cliEstado  = document.getElementById('estado').value;
+                      let cliContato = document.getElementById('contato').value;
+                      dadosJson = {"nome":cliNome, "cidade":cliCidade, "estado":cliEstado, "contato": cliContato};
+
+                      $.ajax({
+                        url         : "http://localhost:8080/clientes",
+                        type        : "POST",
+                        async       : true,
+                        contentType : "application/json",
+                        method      : "POST",
+                        dataType    : "json",
+                        data        : JSON.stringify (dadosJson)
+                      }).done(function(res) {});
+                }
+            </script>
+</body>
+
+</html>

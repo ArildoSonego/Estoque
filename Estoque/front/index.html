@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Gerência de Estoque</title>
+
+    <style>
+
+        h1 {
+            color:MediumSlateBlue;
+        }
+
+        a:link, a:visited {
+            color: blue;
+            text-decoration: none;
+            word-spacing: 15px;
+        }
+
+        a:hover {
+            color: green;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+       .movimentacaoTitulo {
+            text-align: center;
+            font-family: "Impact";
+            font-size: 16px;
+            }
+       .movimentacaoMenu {
+            text-align: center;
+            font-family: "Verdana";
+            font-size: 12px;
+           }
+
+        .clientesTitulo {
+            text-align: center;
+            font-family: "Impact";
+            font-size: 16px;
+          }
+       .clientesMenu {
+            text-align: center;
+            font-family: "Verdana";
+            font-size: 12px;
+         }
+
+        .produtosTitulo {
+            text-align: center;
+            font-family: "Impact";
+            font-size: 16px;
+          }
+       .produtosMenu {
+            text-align: center;
+            font-family: "Verdana";
+            font-size: 12px;
+            text-decoration: none;
+          }
+
+        .consultasTitulo {
+            text-align: center;
+            font-family: "Impact";
+            font-size: 16px;
+          }
+       .consultasMenu {
+            text-align: center;
+            font-family: "Verdana";
+            font-size: 12px;
+            text-decoration: none;
+          }
+
+        .fornecedoresTitulo {
+            text-align: center;
+            font-family: "Impact";
+            font-size: 16px;
+          }
+       .fornecedoresMenu {
+            text-align: center;
+            font-family: "Verdana";
+            font-size: 12px;
+         }
+         .colunas {
+            float: left;
+            width: 33.33%;
+            text-align: center;
+           }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="colunas">
+        <br> <br>
+        <div class="clientesTitulo">
+            <p>   Clientes </p>
+            <p> <img src="iconeClientes.png" alt="Cadastro de Clientes"> </p>
+            <div class="clientesMenu">
+                <a href="clientes/clientesInclui.html" target="janelaCentral" > Incluir </a>
+                <a href="clientes/clientesBusca.html"  target="janelaCentral"> Consultar </a>
+                <a href="clientes/clientesTodos.html"  target="janelaCentral"> Todos </a>
+            </div>
+        </div>
+        <br> <br>
+        <div class="produtosTitulo">
+            <p>   Produtos </p>
+            <p> <img src="iconeProdutos.png" alt="Cadastro de Produtos"> </p>
+            <div class="produtosMenu">
+                <a href="produtos/produtosInclui.html" target="janelaCentral"> Incluir </a>
+                <a href="produtos/produtosBusca.html"  target="janelaCentral"> Consultar </a>
+                <a href="produtos/produtosTodos.html"  target="janelaCentral"> Todos </a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="colunas">
+        <h1> Gerência de Estoque </h1>
+        <iframe name="janelaCentral" height="360px" width="100%" style="border:none;" title="Estoque"></iframe>
+
+        <div class="movimentacaoTitulo">
+            <p> Movimentação</p>
+            <p> <img src="iconeMovimentacao.png" alt="Movimentação de Estoque"> </p>
+        </div>
+        <div class="movimentacaoMenu">
+            <a href="movimentacao/movimentacaoInclui.html" target="janelaCentral"> Incluir </a>
+        </div>
+
+    </div>
+
+    <div class="colunas">
+        <br> <br>
+        <div class="fornecedoresTitulo">
+            <p>   Fornecedores
+            <p> <img src="iconeFornecedores.png" alt="Cadastro de ProdutoFornecedores"> </p>
+            <div class="fornecedoresMenu">
+                <a href="fornecedores/fornecedoresInclui.html" target= "janelaCentral"> Incluir </a>
+                <a href="fornecedores/fornecedoresBusca.html"  target= "janelaCentral"> Consultar </a>
+                <a href="fornecedores/fornecedoresTodos.html"  target= "janelaCentral"> Todos </a>
+            </div>
+        </div>
+        <br> <br>
+        <div class="consultasTitulo">
+            <p>   Consultas </p>
+            <p> <img src="iconeConsultas.png" alt="Consultas"> </p>
+            <div class="consultasMenu">
+                <a href="consultas/consultaSaldoProdutos.html" target= "janelaCentral"> Saldos </a>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
